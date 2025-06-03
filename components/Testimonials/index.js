@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import TestimonialCard from "../../elements/TestominialCard";
+import TestimonialCard from "@/elements/TestiiCard";
 import SwiperCore, { Navigation, Autoplay } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
@@ -42,42 +42,43 @@ export default function Testimonials() {
   }, []);
 
   const testidata = [
-    {
-      testiImg: "/Images/akash.jpeg",
-      testName: "Akash Vishwakarma",
-      testPost: "CEO - Kirana Friends",
-      testdesc:
-        "Gaurav played a crucial role in developing our mobile app and internal tools. His expertise in React Native and frontend development was instrumental in delivering a seamless user experience. He also integrated Clevertap for analytics and AWS S3 for file handling, making our operations much more efficient. A truly dependable and innovative developer.",
-    },
-    {
-      testiImg: "/Images/omar.png",
-      testName: "Omar El Samad",
-      testPost: "Director - MYTE IT, Australia",
-      testdesc:
-        "Working with Gaurav was a pleasure. He brought a strong command of modern web technologies and delivered scalable solutions using Next.js and GraphQL. His integration of Myfatootrah and work with Apollo Client showed both depth and attention to detail. He is an asset to any team looking for frontend excellence.",
-    },
-    {
-      testiImg: "/Images/vifya.jpeg",
-      testName: "Dr. Vidyadhari Singh",
-      testPost: "Associate Professor & HOD - CS&E",
-      testdesc:
-        "Gaurav has consistently demonstrated a rare blend of creativity and technical acumen. His passion for cybersecurity and full-stack development, combined with a solid academic track record, sets him apart. He brings both vision and execution to every project he undertakes.",
-    },
-    {
-      testiImg: "/Images/ayush.webp",
-      testName: "Ayush Lahoti",
-      testPost: "CEO - Bunchup",
-      testdesc:
-        "Gaurav is a rare talent—creative, technically sound, and extremely deadline-driven. He turns ambitious concepts into real, functioning products with ease. His ability to balance UI/UX with backend logic makes him one of the best developers I’ve worked with.",
-    },
-    {
-      testiImg: "/Images/gauravnagrani.jpeg",
-      testName: "Gaurav Nagrani",
-      testPost: "Founder - Flowstate Wealth",
-      testdesc:
-        "Gaurav’s dedication and work ethic are commendable. He approaches each project with precision and clarity, whether it’s frontend design or backend development. His professional integrity and commitment to delivering high-quality work make him a valuable partner on any tech initiative.",
-    },
-  ];
+  {
+    testiImg: "/Images/akash.jpeg",
+    testName: "Akash Vishwakarma",
+    testPost: "CEO - Kirana Friends",
+    testdesc:
+      "Gaurav is someone you can count on when it truly matters. His commitment to delivering quality work, even under tight deadlines, is remarkable. He brings creativity, reliability, and a solution-oriented mindset to every challenge. It’s been a pleasure working with him.",
+  },
+  {
+    testiImg: "/Images/omar.png",
+    testName: "Omar El Samad",
+    testPost: "Director - MYTE IT, Australia",
+    testdesc:
+      "Gaurav stands out for his professionalism and dedication. He is thoughtful in his approach, communicates effectively, and always ensures that the end result exceeds expectations. I’ve thoroughly enjoyed collaborating with him and look forward to working together again.",
+  },
+  {
+    testiImg: "/Images/vifya.jpeg",
+    testName: "Dr. Vidyadhari Singh",
+    testPost: "Associate Professor & HOD - CS&E",
+    testdesc:
+      "Gaurav is an exceptional student who blends creativity with discipline. He approaches his work with a mature and positive attitude, always eager to learn and improve. His consistency and leadership qualities make him a standout individual in both academic and professional settings.",
+  },
+  {
+    testiImg: "/Images/ayush.webp",
+    testName: "Ayush Lahoti",
+    testPost: "CEO - Bunchup",
+    testdesc:
+      "Believing in Gaurav has been one of the best decisions. He is dependable, sharp, and carries a strong sense of ownership in everything he does. His ability to understand the bigger picture and still focus on the details is truly commendable.",
+  },
+  {
+    testiImg: "/Images/gauravnagrani.jpeg",
+    testName: "Gaurav Nagrani",
+    testPost: "Founder - Flowstate Wealth",
+    testdesc:
+      "Working with Gaurav has been a seamless experience. He is respectful, focused, and driven by a genuine passion for excellence. His calm demeanor and problem-solving attitude make him a valuable contributor to any team or project.",
+  },
+];
+
 
   return (
     <div className="mb-[10vh] overflow-hidden">
