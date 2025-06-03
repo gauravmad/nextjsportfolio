@@ -1,5 +1,6 @@
 import React from "react";
 import Tilt from "react-parallax-tilt";
+import Image from "next/image";
 
 const TestimonialCard = ({
   testimonialimg,
@@ -10,15 +11,19 @@ const TestimonialCard = ({
   return (
     <>
       <Tilt className="relative mx-auto tesgradient pt-[2vh] p-[1vh] md:p-[4vh] rounded-2xl">
-        <img
+        <Image
           src="/Images/inverted.png"
           className="absolute -left-[7%] -top-[10%] md:-left-[4%] md:-top-[10%] w-[5vh]"
           alt=""
+          width={50}
+          height={50}
         />
-        <img
+        <Image
           src="/Images/invertedr.png"
           className="absolute -right-[7%] -bottom-[10%] md:-right-[4%] md:-bottom-[10%] w-[5vh]"
           alt=""
+          width={50}
+          height={50}
         />
         <p className="text-[2.2vh] select-none text-white font-medium text-center mb-[4vh]">
           "{testimonialdesc}".
