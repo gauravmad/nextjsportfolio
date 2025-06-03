@@ -42,43 +42,42 @@ export default function Testimonials() {
   }, []);
 
   const testidata = [
-  {
-    testiImg: "/Images/akash.jpeg",
-    testName: "Akash Vishwakarma",
-    testPost: "CEO - Kirana Friends",
-    testdesc:
-      "Gaurav is someone you can count on when it truly matters. His commitment to delivering quality work, even under tight deadlines, is remarkable. He brings creativity, reliability, and a solution-oriented mindset to every challenge. It’s been a pleasure working with him.",
-  },
-  {
-    testiImg: "/Images/omar.png",
-    testName: "Omar El Samad",
-    testPost: "Director - MYTE IT, Australia",
-    testdesc:
-      "Gaurav stands out for his professionalism and dedication. He is thoughtful in his approach, communicates effectively, and always ensures that the end result exceeds expectations. I’ve thoroughly enjoyed collaborating with him and look forward to working together again.",
-  },
-  {
-    testiImg: "/Images/vifya.jpeg",
-    testName: "Dr. Vidyadhari Singh",
-    testPost: "Associate Professor & HOD - CS&E",
-    testdesc:
-      "Gaurav is an exceptional student who blends creativity with discipline. He approaches his work with a mature and positive attitude, always eager to learn and improve. His consistency and leadership qualities make him a standout individual in both academic and professional settings.",
-  },
-  {
-    testiImg: "/Images/ayush.webp",
-    testName: "Ayush Lahoti",
-    testPost: "CEO - Bunchup",
-    testdesc:
-      "Believing in Gaurav has been one of the best decisions. He is dependable, sharp, and carries a strong sense of ownership in everything he does. His ability to understand the bigger picture and still focus on the details is truly commendable.",
-  },
-  {
-    testiImg: "/Images/gauravnagrani.jpeg",
-    testName: "Gaurav Nagrani",
-    testPost: "Founder - Flowstate Wealth",
-    testdesc:
-      "Working with Gaurav has been a seamless experience. He is respectful, focused, and driven by a genuine passion for excellence. His calm demeanor and problem-solving attitude make him a valuable contributor to any team or project.",
-  },
-];
-
+    {
+      testiImg: "/Images/akash.jpeg",
+      testName: "Akash Vishwakarma",
+      testPost: "CEO - Kirana Friends",
+      testdesc:
+        "Gaurav is someone you can count on when it truly matters. His commitment to delivering quality work, even under tight deadlines, is remarkable. He brings creativity, reliability, and a solution-oriented mindset to every challenge. It’s been a pleasure working with him.",
+    },
+    {
+      testiImg: "/Images/omar.png",
+      testName: "Omar El Samad",
+      testPost: "Director - MYTE IT, Australia",
+      testdesc:
+        "Gaurav stands out for his professionalism and dedication. He is thoughtful in his approach, communicates effectively, and always ensures that the end result exceeds expectations. I’ve thoroughly enjoyed collaborating with him and look forward to working together again.",
+    },
+    {
+      testiImg: "/Images/vifya.jpeg",
+      testName: "Dr. Vidyadhari Singh",
+      testPost: "Associate Professor & HOD - CS&E",
+      testdesc:
+        "Gaurav is an exceptional student who blends creativity with discipline. He approaches his work with a mature and positive attitude, always eager to learn and improve. His consistency and leadership qualities make him a standout individual in both academic and professional settings.",
+    },
+    {
+      testiImg: "/Images/ayush.webp",
+      testName: "Ayush Lahoti",
+      testPost: "CEO - Bunchup",
+      testdesc:
+        "Believing in Gaurav has been one of the best decisions. He is dependable, sharp, and carries a strong sense of ownership in everything he does. His ability to understand the bigger picture and still focus on the details is truly commendable.",
+    },
+    {
+      testiImg: "/Images/gauravnagrani.jpeg",
+      testName: "Gaurav Nagrani",
+      testPost: "Founder - Flowstate Wealth",
+      testdesc:
+        "Working with Gaurav has been a seamless experience. He is respectful, focused, and driven by a genuine passion for excellence. His calm demeanor and problem-solving attitude make him a valuable contributor to any team or project.",
+    },
+  ];
 
   return (
     <div className="mb-[10vh] overflow-hidden">
@@ -120,13 +119,37 @@ export default function Testimonials() {
         >
           {testidata.map((item, index) => (
             <SwiperSlide key={index}>
-              <div className="p-[4vh] py-[10vh]">
-                <TestimonialCard
-                  testimonialdesc={item.testdesc}
-                  testimonialname={item.testName}
-                  testimonialpost={item.testPost}
-                  testimonialimg={item.testiImg}
-                />
+              <div className="p-[4vh] py-[10vh]" key={index}>
+                <div className=" mx-auto tesgradient pt-[2vh] p-[1vh] md:p-[4vh] rounded-2xl relative">
+                  <img
+                    src="/Images/inverted.png"
+                    className="absolute -left-[7%] -top-[10%] md:-left-[4%] md:-top-[10%] w-[5vh]"
+                    alt=""
+                  />
+                  <img
+                    src="/Images/invertedr.png"
+                    className="absolute -right-[7%] -bottom-[10%] md:-right-[4%] md:-bottom-[10%] w-[5vh]"
+                    alt=""
+                  />
+                  <p className="text-[2.2vh] select-none text-white font-medium text-center mb-[4vh]">
+                    "{item.testdesc}".
+                  </p>
+                  <div className="">
+                    <div className="flex flex-row justify-center items-center">
+                      <img
+                        src={item.testiImg}
+                        className="w-[9vh] md:w-[10vh] mb-[1vh] mx-auto rounded-full"
+                        alt="Image"
+                      />
+                    </div>
+                    <p className="text-[2.5vh] md:text-[3vh] text-white text-center">
+                      {item.testName}
+                    </p>
+                    <p className="text-[1.8vh] md:text-[2.3vh] text-gray-200 font-normal text-center">
+                      {item.testPost}
+                    </p>
+                  </div>
+                </div>
               </div>
             </SwiperSlide>
           ))}
