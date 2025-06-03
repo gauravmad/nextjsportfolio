@@ -8,30 +8,30 @@ import "aos/dist/aos.css";
 export default function Projects() {
   const projects = [
     {
-      projectimage: "/Images/webbunchup.webp",
-      projectdemolink: "https://bunchup.in",
+      projectimage: "/assets-json/dortv.png",
+      projectdemolink: "https://new-dor-dev.vercel.app/",
       projectgithublink: "",
     },
     {
-      projectimage: "/Images/maliweb.webp",
-      projectdemolink: "https://samarthkrupafarm.in",
+      projectimage: "/assets-json/flowstate.png",
+      projectdemolink: "https://flowstate-ruby.vercel.app/",
       projectgithublink: "",
     },
     {
-      projectimage: "/Images/webbang.webp",
-      projectdemolink: "https://thebangoutfit.com",
+      projectimage: "/assets-json/hsbookstore.png",
+      projectdemolink: "https://hsbookstore.vercel.app/default-channel/en-US",
       projectgithublink: "",
     },
     {
-      projectimage: "/Images/webpelikas.webp",
-      projectdemolink: "https://pelikashealthcare.com",
+      projectimage: "/assets-json/skbeach.png",
+      projectdemolink: "https://www.samarthkrupabeachresort.com/",
       projectgithublink: "",
     },
     {
-      projectimage: "/Images/webgrocery.webp",
-      projectdemolink: "",
+      projectimage: "/assets-json/bookings.png",
+      projectdemolink: "https://bookings.bunchup.in/",
       projectgithublink:
-        "https://github.com/gauravmad/Grocery-management-System",
+        "",
     },
     {
       projectimage: "/Images/bunchupap.jpg",

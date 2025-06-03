@@ -72,7 +72,7 @@ export default function HomeSection() {
           </span>
         </h1>
         <button className="btngradient mt-[3vh] px-[2vh] md:px-[3vh] py-[1vh] my-1 font-semibold text-[2.3vh] md:text-[3vh] text-blue-100">
-          <a href="./assets-json/MyResume.pdf" target="_blank">
+          <a href="./assets-json/Gaurav Madan Resume.pdf" target="_blank">
             <span></span>
             <span></span>
             <span></span>

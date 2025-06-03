@@ -97,7 +97,7 @@ export default function About() {
             className="gauravimg relative p-[1vh] w-[80vw] h-[52vh] md:w-[50vh] md:h-[60vh] flex flex-row justify-center items-center"
           >
             <img
-              src="./Images/gauravimg.webp"
+              src="./Images/blazerpic.jpg"
               className="absolute z-[50] w-[95%] h-[50vh] mx-auto md:w-[48vh] md:h-[58vh] object-cover"
               alt="gauravimg"
             />
