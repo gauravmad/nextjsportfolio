@@ -9,7 +9,7 @@ const TestimonialCard = ({
 }) => {
   return (
     <>
-      <Tilt className=" mx-auto tesgradient pt-[2vh] p-[1vh] md:p-[4vh] rounded-2xl relative">
+      <div className=" mx-auto tesgradient pt-[2vh] p-[1vh] md:p-[4vh] rounded-2xl relative">
         <img
           src="/Images/inverted.png"
           className="absolute -left-[7%] -top-[10%] md:-left-[4%] md:-top-[10%] w-[5vh]"
@@ -38,7 +38,7 @@ const TestimonialCard = ({
             {testimonialpost}
           </p>
         </div>
-      </Tilt>
+      </div>
     </>
   );
 };
