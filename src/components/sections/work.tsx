@@ -24,54 +24,48 @@ function ProjectPanel({ project, index }: { project: Project; index: number }) {
       id={`project-${project.slug}`}
       data-panel
       aria-labelledby={`project-${project.slug}-title`}
-      className="relative isolate flex w-full shrink-0 flex-col overflow-hidden rounded-2xl border border-rule bg-panel lg:h-[min(76vh,760px)] lg:w-[min(86vw,1320px)] lg:flex-row"
+      className="group/panel relative isolate flex w-full shrink-0 flex-col overflow-hidden rounded-2xl border border-rule bg-panel transition-colors hover:border-foreground/20 lg:h-[min(72vh,700px)] lg:w-[min(calc((100vw-16rem)/2),720px)]"
     >
-      {/* Screenshot: full-bleed on desktop, fading left into the panel behind the copy. */}
-      <div className="relative aspect-16/10 w-full lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[68%]">
-        <div
-          data-shot
-          className="absolute inset-0 mask-[linear-gradient(to_top,transparent,black_35%)] lg:inset-x-[-4%] lg:mask-[linear-gradient(to_right,transparent_0%,transparent_12%,black_55%),linear-gradient(to_top,transparent_0%,black_30%)] lg:mask-intersect"
-        >
+      {/* Screenshot on top, fading down into the card so the copy sits on black. */}
+      <div className="relative aspect-16/9 w-full shrink-0 overflow-hidden lg:aspect-auto lg:h-[50%]">
+        <div data-shot className="absolute -inset-x-[4%] inset-y-0 mask-[linear-gradient(to_bottom,black_45%,transparent)]">
           <Image
             src={project.image.src}
             alt={project.image.alt}
             fill
-            sizes="(min-width: 1024px) 60vw, 100vw"
-            className="object-cover object-top-left opacity-70"
-            priority={index === 0}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            className="object-cover object-top-left opacity-75 transition-[opacity,scale] duration-700 group-hover/panel:scale-[1.03] group-hover/panel:opacity-90"
+            priority={index < 2}
           />
         </div>
-        <div className="absolute top-4 right-4 lg:top-6 lg:right-6">
+        <div className="absolute top-3 right-3">
           <AddressBar host={project.host} />
         </div>
       </div>
 
-      <div className="relative flex flex-col justify-between gap-8 p-6 sm:p-10 lg:w-[46%] lg:max-w-136">
+      <div className="relative -mt-10 flex flex-1 flex-col gap-5 px-6 pb-6 sm:px-8 sm:pb-8">
         <header data-reveal>
           <p className="font-mono text-xs text-muted-foreground">
             {String(index + 1).padStart(2, "0")}/{String(projects.length).padStart(2, "0")} <span className="text-rule">·</span>{" "}
             {project.kind}
           </p>
-          <h3 id={`project-${project.slug}-title`} className="type-title mt-3 text-[clamp(2.5rem,4.8vw,4.5rem)]">
+          <h3 id={`project-${project.slug}-title`} className="type-title mt-2 text-[clamp(2.25rem,3.2vw,3.25rem)]">
             {project.name}
           </h3>
-          <p className="mt-4 text-lg leading-relaxed text-foreground/85">{project.summary}</p>
+          <p className="mt-3 leading-relaxed text-foreground/85">{project.summary}</p>
         </header>
 
-        <div data-reveal className="space-y-5">
-          <p className="text-[15px] leading-relaxed text-muted-foreground">{project.detail}</p>
-          <ul className="space-y-1.5 font-mono text-[13px]">
-            {project.specs.map((spec) => (
-              <li key={spec} className="flex gap-2.5">
-                <span aria-hidden className="text-ok">✓</span>
-                {spec}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul data-reveal className="grid gap-x-5 gap-y-1.5 font-mono text-[12.5px] text-foreground/90 sm:grid-cols-2">
+          {project.specs.map((spec) => (
+            <li key={spec} className="flex gap-2">
+              <span aria-hidden className="text-ok">✓</span>
+              {spec}
+            </li>
+          ))}
+        </ul>
 
-        <footer data-reveal className="space-y-4">
-          <p className="font-mono text-xs leading-relaxed text-muted-foreground">
+        <footer data-reveal className="mt-auto flex flex-wrap items-end justify-between gap-4 border-t border-rule pt-4">
+          <p className="min-w-0 flex-1 font-mono text-[11.5px] leading-relaxed text-muted-foreground">
             <span className="text-syntax-keyword">stack</span> = [
             {project.stack.map((item, i) => (
               <span key={item}>
@@ -85,11 +79,11 @@ function ProjectPanel({ project, index }: { project: Project; index: number }) {
             href={`https://${project.host}`}
             target="_blank"
             rel="noreferrer"
-            className="group inline-flex items-center gap-1.5 text-sm font-medium text-foreground underline decoration-rule underline-offset-4 transition-colors hover:decoration-signal"
+            className="group inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-rule px-3 py-1.5 text-sm font-medium transition-colors hover:border-foreground/40"
           >
-            Open {project.name}
+            Open
             <ArrowUpRight aria-hidden className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            <span className="sr-only">(opens in a new tab)</span>
+            <span className="sr-only">{project.name} (opens in a new tab)</span>
           </a>
         </footer>
       </div>
@@ -122,20 +116,21 @@ export function Work() {
           },
         });
 
-        gsap.utils.toArray<HTMLElement>("[data-panel]", el).forEach((panel, index) => {
+        gsap.utils.toArray<HTMLElement>("[data-panel]", el).forEach((panel) => {
           // Screenshots drift against the slide, so they read as a layer behind the copy.
           gsap.fromTo(
             panel.querySelector("[data-shot]"),
-            { xPercent: 4 },
+            { xPercent: 3 },
             {
-              xPercent: -4,
+              xPercent: -3,
               ease: "none",
               scrollTrigger: { trigger: panel, containerAnimation: slide, start: "left right", end: "right left", scrub: true },
             },
           );
-          // The first panel is in view when the pin starts; the rest reveal as they slide in.
+          // Panels already on screen when the pin starts (two at a time) reveal on
+          // vertical scroll; the rest reveal as they slide in from the right.
           const trigger =
-            index === 0
+            panel.offsetLeft + panel.offsetWidth / 2 < window.innerWidth
               ? { trigger: root.current, start: "top 60%", toggleActions: "play none none reverse" }
               : { trigger: panel, containerAnimation: slide, start: "left 70%", toggleActions: "play none none reverse" };
           gsap.from(panel.querySelectorAll("[data-reveal]"), { opacity: 0, y: 24, duration: 0.8, stagger: 0.1, ease: "expo.out", scrollTrigger: trigger });
@@ -164,12 +159,12 @@ export function Work() {
           Systems in production
         </h2>
         <p className="max-w-[40ch] text-muted-foreground">
-          Four products I built end to end, all live today. Scroll to move through them.
+          Four products I built end to end, all live today. Keep scrolling to move through them.
         </p>
       </div>
 
       {/* Panels fade out before they slide under the fixed trace rail. */}
-      <div className="lg:mask-[linear-gradient(to_right,transparent_0,transparent_150px,black_230px)]">
+      <div className="lg:mask-[linear-gradient(to_right,transparent_0,transparent_96px,black_152px)]">
         <div ref={track} className="flex flex-col gap-6 px-4 sm:px-8 lg:w-max lg:flex-row lg:gap-8 lg:pl-40 lg:pr-16">
           {projects.map((project, index) => (
             <ProjectPanel key={project.slug} project={project} index={index} />
