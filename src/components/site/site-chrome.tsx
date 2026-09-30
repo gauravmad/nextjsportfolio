@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Kbd } from "@/components/ui/kbd";
 import { profile } from "@/content/portfolio";
+import { ChatWidget } from "./chat-widget";
 import { CommandMenu } from "./command-menu";
 import { useScrollToSection } from "./smooth-scroll";
 import { TraceRail } from "./trace-rail";
@@ -22,7 +23,7 @@ export function SiteChrome() {
         Skip to content
       </a>
 
-      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-center justify-between px-4 py-4 sm:px-8">
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex items-center justify-between bg-gradient-to-b from-ink via-ink/70 to-transparent px-4 pt-4 pb-6 sm:px-8">
         <button
           type="button"
           onClick={() => scrollTo("top")}
@@ -44,6 +45,7 @@ export function SiteChrome() {
 
       <TraceRail />
       <CommandMenu open={open} onOpenChange={setOpen} />
+      <ChatWidget />
     </>
   );
 }

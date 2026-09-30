@@ -57,7 +57,7 @@ export function Stack() {
                 <span className="text-[#c084fc]">export const</span> <span className="text-packet">howIBuild</span> = {"{"}
               </span>
               {engineeringConfig.map(([key, value]) => (
-                <span key={key} data-code-line className="block [padding-left:calc(1.5rem+1.5ch)] [text-indent:-1.5ch]">
+                <span key={key} data-code-line className="block pl-[calc(1.5rem+1.5ch)] indent-[-1.5ch]">
                   <span className="text-[#7dd3fc]">{key}</span>
                   <span className="text-muted-foreground">: </span>
                   <span className="text-[#fdba74]">&quot;{value}&quot;</span>

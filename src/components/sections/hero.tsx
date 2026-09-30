@@ -7,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import { useScrollToSection } from "@/components/site/smooth-scroll";
 import { HeroScene } from "@/components/three/hero-scene";
 import { sceneState } from "@/components/three/scene-state";
-import { metrics, profile } from "@/content/portfolio";
+import { profile } from "@/content/portfolio";
 import { gsap, MOTION, ScrollTrigger, SplitText, useGSAP } from "@/lib/motion/gsap";
-
-const [revenue, preSeed, users] = metrics;
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -76,7 +74,7 @@ export function Hero() {
     >
       <HeroScene />
       {/* Keeps the type legible where it overlaps the graph. */}
-      <div className="pointer-events-none absolute inset-0 -z-0 bg-[radial-gradient(ellipse_at_20%_85%,var(--ink)_20%,transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_20%_85%,var(--ink)_20%,transparent_70%)]" />
 
       <div data-hero-copy className="relative px-4 pb-10 sm:px-8 lg:pl-40 lg:pr-16 lg:pb-14">
         <p data-hero-prompt className="mb-6 font-mono text-sm text-muted-foreground">
@@ -93,10 +91,10 @@ export function Hero() {
 
         <h1 data-hero-name className="type-display text-[clamp(4.25rem,15vw,13.5rem)] text-foreground">
           <span className="block">Gaurav</span>
-          <span className="block text-transparent [-webkit-text-stroke:1.5px_var(--signal)]">Madan</span>
+          <span className="block text-transparent [-webkit-text-stroke:1.5px_#ededed]">Madan</span>
         </h1>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,34rem)_1fr] lg:items-end">
+        <div className="mt-8 max-w-136">
           <div>
             <p data-hero-reveal className="text-xl font-semibold sm:text-2xl">
               {profile.headline}
@@ -108,8 +106,8 @@ export function Hero() {
               {profile.pitch}
             </p>
             <div data-hero-reveal className="mt-7 flex flex-wrap gap-3">
-              <Button size="lg" className="h-11 px-5 text-base" onClick={() => scrollTo("impact")}>
-                See the outcomes
+              <Button size="lg" className="h-11 px-5 text-base" onClick={() => scrollTo("work")}>
+                See the work
               </Button>
               <Button
                 size="lg"
@@ -123,25 +121,6 @@ export function Hero() {
             </div>
           </div>
 
-          {/* The pipeline's "result" line: outcomes visible before anyone scrolls. */}
-          <dl
-            data-hero-reveal
-            aria-label="Headline outcomes"
-            className="grid gap-x-8 gap-y-3 border-l border-rule pl-5 font-mono text-sm sm:grid-cols-3 lg:justify-self-end"
-          >
-            {[revenue, preSeed, users].map((metric) =>
-              metric ? (
-                <div key={metric.label}>
-                  <dt className="text-muted-foreground">{metric.label}</dt>
-                  <dd className="mt-1 text-lg text-foreground">
-                    {metric.before ? <span className="text-muted-foreground line-through decoration-signal/70">{metric.before}</span> : null}
-                    {metric.before ? <span className="px-1.5 text-signal">→</span> : null}
-                    {metric.value}
-                  </dd>
-                </div>
-              ) : null,
-            )}
-          </dl>
         </div>
       </div>
     </section>

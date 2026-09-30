@@ -1,11 +1,13 @@
 /**
- * Sends contact-form messages through Resend's REST API (no SDK needed).
+ * Sends contact-form messages through AWS SES (v2).
  *
- * Not configured (no RESEND_API_KEY / CONTACT_TO_EMAIL):
+ * Not configured (no AWS keys / SES_FROM_EMAIL):
  *   - development: logs the message and succeeds, so the form works locally.
  *   - production:  throws MailerNotConfiguredError, and the route answers 503.
  */
 import "server-only";
+
+import { SendEmailCommand, SESv2Client } from "@aws-sdk/client-sesv2";
 
 import { getServerEnv } from "@/lib/config/env";
 import type { ContactInput } from "@/features/contact/schemas";
@@ -17,19 +19,21 @@ export class MailerNotConfiguredError extends Error {
   }
 }
 
-export class MailerDeliveryError extends Error {
-  constructor(readonly status: number, readonly body: string) {
-    super(`Resend responded ${status}`);
-    this.name = "MailerDeliveryError";
-  }
+let client: SESv2Client | null = null;
+
+function sesClient() {
+  const { AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } = getServerEnv();
+  client ??= new SESv2Client({
+    region: AWS_REGION,
+    credentials: { accessKeyId: AWS_ACCESS_KEY_ID!, secretAccessKey: AWS_SECRET_ACCESS_KEY! },
+  });
+  return client;
 }
 
-const RESEND_URL = "https://api.resend.com/emails";
-
 export async function sendContactEmail(message: ContactInput): Promise<void> {
-  const { NODE_ENV, RESEND_API_KEY, CONTACT_TO_EMAIL, CONTACT_FROM_EMAIL } = getServerEnv();
+  const { NODE_ENV, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, SES_FROM_EMAIL, CONTACT_TO_EMAIL } = getServerEnv();
 
-  if (!RESEND_API_KEY || !CONTACT_TO_EMAIL) {
+  if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY || !SES_FROM_EMAIL) {
     if (NODE_ENV !== "production") {
       console.info("[contact] mailer not configured; message not sent:", message);
       return;
@@ -38,23 +42,23 @@ export async function sendContactEmail(message: ContactInput): Promise<void> {
   }
 
   // Plain text only: user input never gets rendered as HTML in the inbox.
-  const response = await fetch(RESEND_URL, {
-    method: "POST",
-    signal: AbortSignal.timeout(10_000),
-    headers: {
-      Authorization: `Bearer ${RESEND_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from: CONTACT_FROM_EMAIL,
-      to: [CONTACT_TO_EMAIL],
-      reply_to: message.email,
-      subject: `Portfolio enquiry from ${message.name}`,
-      text: `Name: ${message.name}\nEmail: ${message.email}\n\n${message.message}`,
+  await sesClient().send(
+    new SendEmailCommand({
+      FromEmailAddress: `Portfolio <${SES_FROM_EMAIL}>`,
+      Destination: { ToAddresses: [CONTACT_TO_EMAIL] },
+      ReplyToAddresses: [message.email],
+      Content: {
+        Simple: {
+          Subject: { Data: `Portfolio enquiry from ${message.name}`, Charset: "UTF-8" },
+          Body: {
+            Text: {
+              Data: `Name: ${message.name}\nEmail: ${message.email}\n\n${message.message}`,
+              Charset: "UTF-8",
+            },
+          },
+        },
+      },
     }),
-  });
-
-  if (!response.ok) {
-    throw new MailerDeliveryError(response.status, await response.text());
-  }
+    { abortSignal: AbortSignal.timeout(10_000) },
+  );
 }

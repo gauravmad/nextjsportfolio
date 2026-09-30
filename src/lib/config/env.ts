@@ -33,12 +33,19 @@ export const env = parsedPublic.success ? parsedPublic.data : publicSchema.parse
 
 const serverSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-  /** Resend API key for the contact form. Unset in production = contact disabled. */
-  RESEND_API_KEY: z.string().min(1).optional(),
+  /* Contact form → AWS SES. All four unset in production = contact disabled. */
+  AWS_REGION: z.string().min(1).default("ap-south-1"),
+  AWS_ACCESS_KEY_ID: z.string().min(1).optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().min(1).optional(),
+  /** Verified SES identity the email is sent from. */
+  SES_FROM_EMAIL: z.email().optional(),
   /** Inbox that receives contact-form messages. */
-  CONTACT_TO_EMAIL: z.email().optional(),
-  /** Sender on a domain verified in Resend. */
-  CONTACT_FROM_EMAIL: z.string().min(1).default("Portfolio <onboarding@resend.dev>"),
+  CONTACT_TO_EMAIL: z.email().default("gaurav@mesaschool.co"),
+
+  /* "Ask me anything" chat → OpenRouter (OpenAI-compatible). Unset key = chat disabled. */
+  OPENROUTER_BASE_URL: z.url().default("https://openrouter.ai/api/v1"),
+  OPENROUTER_MODEL: z.string().min(1).default("google/gemini-3.7-flash"),
+  OPENROUTER_API_KEY: z.string().min(1).optional(),
 });
 
 let cachedServerEnv: z.infer<typeof serverSchema> | null = null;
@@ -51,9 +58,14 @@ export function getServerEnv() {
 
   const parsed = serverSchema.safeParse({
     NODE_ENV: process.env.NODE_ENV,
-    RESEND_API_KEY: process.env.RESEND_API_KEY || undefined,
+    AWS_REGION: process.env.AWS_REGION || undefined,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || undefined,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || undefined,
+    SES_FROM_EMAIL: process.env.SES_FROM_EMAIL || undefined,
     CONTACT_TO_EMAIL: process.env.CONTACT_TO_EMAIL || undefined,
-    CONTACT_FROM_EMAIL: process.env.CONTACT_FROM_EMAIL || undefined,
+    OPENROUTER_BASE_URL: process.env.OPENROUTER_BASE_URL || undefined,
+    OPENROUTER_MODEL: process.env.OPENROUTER_MODEL || undefined,
+    OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY || undefined,
   });
 
   if (!parsed.success) {

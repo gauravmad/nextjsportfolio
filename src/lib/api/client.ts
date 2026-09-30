@@ -49,9 +49,41 @@ async function request<T>(
   return envelope.data;
 }
 
+/**
+ * POST and read a streamed plain-text response chunk by chunk. Errors before
+ * the stream starts still arrive as the `{ error }` envelope → `ApiError`.
+ */
+async function* stream(path: string, body: unknown, { signal }: { signal?: AbortSignal } = {}) {
+  let response: Response;
+  try {
+    response = await fetch(path, {
+      method: "POST",
+      signal,
+      headers: { Accept: "text/plain", "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (cause) {
+    if (cause instanceof DOMException && cause.name === "AbortError") return;
+    throw ApiError.network(cause);
+  }
+  if (!response.ok || !response.body) throw await ApiError.fromResponse(response);
+
+  const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) return;
+      yield value;
+    }
+  } finally {
+    reader.releaseLock();
+  }
+}
+
 export const api = {
   get: <T>(path: string, options?: RequestOptions) =>
     request<T>(path, "GET", undefined, options),
   post: <T>(path: string, body?: unknown, options?: RequestOptions) =>
     request<T>(path, "POST", body, options),
+  stream,
 };

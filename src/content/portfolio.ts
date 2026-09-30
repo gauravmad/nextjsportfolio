@@ -1,6 +1,9 @@
 /**
  * Every word on the portfolio lives here, so copy edits never touch components.
- * Source of truth: resume (Oct 2026), LinkedIn headline, GitHub profile.
+ * The chat assistant's system prompt is built from this file too, so it can
+ * only ever say what's written here.
+ *
+ * Source of truth: resume (Oct 2026), LinkedIn headline, GitHub (verified via API).
  */
 
 export const profile = {
@@ -21,141 +24,207 @@ export const profile = {
 export const manifesto =
   "Most founders don't need more code. They need the right system, shipped this week, costing what it should. I build agents that answer from real data, platforms that replace spreadsheets and aging vendors, and the guardrails that keep both safe and cheap in production.";
 
-export interface Metric {
+export interface Outcome {
+  /** What the outcome is about, in words, before any number. */
+  what: string;
   before?: string;
-  value: string;
-  label: string;
-  context: string;
+  after: string;
+  how: string;
 }
 
-export const metrics: Metric[] = [
+export const outcomes: Outcome[] = [
   {
+    what: "Ed-tech startup's monthly revenue",
     before: "₹7–8L",
-    value: "₹45–50L",
-    label: "monthly revenue",
-    context: "Ed-tech startup, after I set up its tech and automated operations end to end",
+    after: "₹45–50L",
+    how: "Set up its tech from scratch and automated operations end to end, so the founders could focus on sales.",
   },
   {
-    value: "₹40L",
-    label: "pre-seed raised",
-    context: "Ad-tech startup whose product I built end to end",
+    what: "Ad-tech startup's pre-seed round",
+    after: "₹40L raised",
+    how: "Built the product end to end as its founding engineer; it's now scaling.",
   },
   {
-    value: "1,000+",
-    label: "users on Mesa LMS",
-    context: "Three live cohorts, five role-based portals, 38 modules, one engineer",
+    what: "Cost of replacing Moodle",
+    after: "₹40–50L saved",
+    how: "Built Nexus, Mesa's own LMS, instead of licensing a vendor platform. 1,000+ users across three cohorts.",
   },
   {
-    value: "45×",
-    label: "cheaper by design",
-    context: "Influencer Intelligence sends only ~9% of comments to an LLM",
+    what: "LLM spend on creator discovery",
+    after: "~45× cheaper",
+    how: "Only ~9% of comments ever reach an LLM; cheap models filter first, frontier models score the shortlist.",
   },
   {
+    what: "B-school ops turnaround",
     before: "weeks",
-    value: "minutes",
-    label: "ops turnaround",
-    context: "Careers CRM, procure-to-pay finance and Sheets sync replaced Excel at Mesa",
+    after: "minutes",
+    how: "A careers CRM, procure-to-pay finance and scheduled Sheets sync replaced Excel-driven processes.",
   },
+];
+
+/** Engineering throughput, verified from the GitHub API (Oct 2026). */
+export const gitStats: { value: string; label: string }[] = [
+  { value: "2,130", label: "commits to Mesa's org" },
+  { value: "39 / 52", label: "Mesa repos shipped to" },
+  { value: "6,018", label: "commits on GitHub, all time" },
+  { value: "3+ yrs", label: "TypeScript, Python, Next.js" },
 ];
 
 export interface Project {
   slug: string;
   name: string;
+  kind: string;
   summary: string;
   detail: string;
-  /** The business outcome, shown first and largest. */
-  outcome: { value: string; label: string };
-  /** Hard engineering facts that back the outcome up. */
+  /** Hard engineering facts. */
   specs: string[];
   stack: string[];
-  /** The architecture as a left-to-right pipeline, drawn on scroll. */
-  pipeline: string[];
-  href?: string;
+  image: { src: string; alt: string; width: number; height: number };
+  /** Public production host; verified to return 200. */
+  host: string;
 }
 
 export const projects: Project[] = [
   {
-    slug: "mesa-lms",
-    name: "Mesa LMS",
-    summary: "Replaced Moodle for a business school, as its only engineer.",
+    slug: "nexus",
+    name: "Nexus",
+    kind: "Mesa's LMS, with an AI agent built in",
+    summary:
+      "Replaced Moodle for the whole business school. I built it from scratch as the only engineer, and it runs every live cohort.",
     detail:
-      "38 product modules and five portals (admin, student, professor, mentor, parent) serving every live cohort. It saved an estimated ₹40–50 lakh against the vendor route.",
-    outcome: { value: "₹40–50L", label: "saved vs. the vendor route" },
-    specs: ["39 API modules, 56 frontend features", "5 role-based portals", "1,000+ users across 3 cohorts", "655 commits, sole engineer"],
-    stack: ["Next.js 16", "Express 5", "PostgreSQL", "Kysely", "GCP"],
-    pipeline: ["Next.js portals", "Express 5 API", "Zod + OpenAPI", "Kysely", "Cloud SQL", "App Engine"],
-    href: "https://students.mesaschool.co.in",
-  },
-  {
-    slug: "nexus-ai",
-    name: "Nexus AI",
-    summary: "An agent inside the LMS that answers from live data.",
-    detail:
-      "Routes each question across 10 intent types to text-to-SQL, RAG over documents, or both. Model-written SQL is statically guarded, auto-repaired and run under a read-only Postgres role.",
-    outcome: { value: "10", label: "intent types routed to SQL, RAG or both" },
-    specs: ["Static SQL guard + auto-repair", "Read-only Postgres role", "pgvector memory", "SSE streaming"],
-    stack: ["LangChain", "pgvector", "PostgreSQL", "SSE"],
-    pipeline: ["Question", "Intent router", "Text-to-SQL · RAG", "SQL guard", "Read-only role", "Streamed answer"],
+      "Five role-based portals (admin, student, professor, mentor, parent) over 39 API modules. Nexus AI, the agent inside it, routes each question across 10 intent types to text-to-SQL, RAG over documents, or both. Model-written SQL is statically guarded, auto-repaired and run under a read-only Postgres role.",
+    specs: [
+      "39 API modules, 56 frontend features",
+      "Nexus AI: 10 intent types, guarded text-to-SQL",
+      "Read-only Postgres role, pgvector memory",
+      "655 commits, sole engineer",
+    ],
+    stack: ["Next.js 16", "Express 5", "Kysely", "PostgreSQL", "LangChain", "pgvector", "App Engine"],
+    image: { src: "/work/nexus.webp", alt: "Nexus student dashboard: class schedule, attendance and community feed", width: 1470, height: 650 },
+    host: "students.mesaschool.co.in",
   },
   {
     slug: "founders-compass",
     name: "Founder's Compass",
-    summary: "An AI mentor that scores a startup idea out of 100.",
+    kind: "AI startup mentor",
+    summary: "Takes a founder from a raw idea to a verdict scored out of 100, then plans the first sprint.",
     detail:
-      "Eight validation stages driven by a two-model loop: Gemini Pro mentors while Gemini Flash extracts structure and writes search queries, grounded in live Google Search and RAG memory. Launch Pad turns the idea into a 7–10 day sprint plan.",
-    outcome: { value: "8", label: "validation stages to a scored verdict" },
-    specs: ["Two-model agent loop (Pro + Flash)", "Live Google Search grounding", "Qdrant RAG memory", "7–10 day sprint plans"],
-    stack: ["FastAPI", "Gemini (Vertex AI)", "Qdrant", "MongoDB", "Redis", "Next.js"],
-    pipeline: ["Idea", "Gemini Flash extract", "Search grounding", "Gemini Pro mentor", "Qdrant memory", "Score / 100"],
-    href: "https://compass-msl.mesaschool.co.in",
+      "Eight validation stages driven by a two-model loop: Gemini Pro mentors while Gemini Flash extracts structured data and writes search queries, grounded in live Google Search and RAG memory. Launch Pad's Business → Product → Tech agents turn the idea into a 7–10 day sprint plan.",
+    specs: ["8 validation stages", "Two-model agent loop (Pro + Flash)", "Live Google Search grounding", "Qdrant RAG memory"],
+    stack: ["FastAPI", "Gemini (Vertex AI)", "LangGraph", "Qdrant", "MongoDB", "Redis", "Next.js"],
+    image: { src: "/work/founders-compass.webp", alt: "Founder's Compass: an idea moving through validation stages with a score of 72 out of 100", width: 1600, height: 843 },
+    host: "compass-msl.mesaschool.co.in",
   },
   {
     slug: "influencer-intelligence",
     name: "Influencer Intelligence",
-    summary: "From a one-line brief to a ranked creator shortlist.",
+    kind: "Creator discovery for D2C brands",
+    summary: "Turns a one-line campaign brief into a ranked shortlist of creators, showing every step of its reasoning.",
     detail:
-      "A 13-stage pipeline with a human approval gate. Cheap discovery first (Serper, Apify, Gemini Flash), frontier-model scoring only on the brand's shortlist, and Hinglish + English purchase-intent scoring through pgvector.",
-    outcome: { value: "~45×", label: "cheaper LLM spend by design" },
-    specs: ["13-stage pipeline", "Human approval gate", "Only ~9% of comments reach an LLM", "Hinglish + English intent scoring"],
-    stack: ["Express 5", "Postgres + pgvector", "Gemini", "GPT"],
-    pipeline: ["Brief", "Cheap discovery", "Intent vectors", "Human approval", "GPT scoring", "Shortlist"],
-    href: "https://influencer.mesaschool.co.in",
-  },
-  {
-    slug: "careers-crm",
-    name: "Careers CRM",
-    summary: "The B-school's placements and programme ops, off Excel.",
-    detail:
-      "Career pathways, placement prep, an AI portfolio builder and programme operations in one system, with scheduled Google Sheets sync for the teams that still live in spreadsheets.",
-    outcome: { value: "weeks → min", label: "turnaround on ops requests" },
-    specs: ["FastAPI + MongoDB", "LangGraph AI portfolio", "Scheduled Sheets sync", "257 commits"],
-    stack: ["FastAPI", "MongoDB", "LangGraph", "Next.js", "GCP"],
-    pipeline: ["Next.js app", "FastAPI", "LangGraph agents", "MongoDB", "Sheets sync"],
-    href: "https://careers-crm.mesaschool.co.in",
+      "A 13-stage pipeline with a human approval gate. Cheap discovery runs first (Serper, Apify, Gemini Flash); GPT scores only the brand's shortlist. Purchase intent in Hinglish and English is scored through pgvector.",
+    specs: ["13-stage pipeline", "Human approval gate", "~9% of comments reach an LLM", "Hinglish + English intent scoring"],
+    stack: ["Express 5", "Postgres + pgvector", "Gemini", "GPT", "Serper", "Apify"],
+    image: { src: "/work/influencer-intelligence.webp", alt: "Influencer Intelligence: a prompt box asking for a campaign brief", width: 1567, height: 991 },
+    host: "influencer.mesaschool.co.in",
   },
   {
     slug: "ai-cto",
     name: "The AI CTO",
-    summary: "A build kit that lets non-technical founders ship with AI agents.",
+    kind: "Build kit for non-technical founders",
+    summary: "Decides what to build first, then scaffolds a production-ready project that coding agents build on.",
     detail:
-      "An npx CLI with tiered stack kits, 14 module guides, and security and launch checklists. Mesa Startup Lab uses it to scaffold its incubated startups' products.",
-    outcome: { value: "0 → prod", label: "for non-technical founders" },
+      "An npx CLI with tiered stack kits, 14 module guides, and security and launch checklists. It works with Claude Code, Cursor and Codex CLI, and Mesa Startup Lab uses it to scaffold its incubated startups' products.",
     specs: ["npx CLI", "Tiered stack kits", "14 module guides", "Security + launch checklists"],
-    stack: ["Node.js CLI", "Next.js 16", "TypeScript"],
-    pipeline: ["npx ai-cto", "Pick a tier", "Scaffold kit", "Module guides", "Launch checklist"],
-    href: "https://ai-cto-tan.vercel.app",
+    stack: ["Node.js CLI", "Next.js 16", "TypeScript", "Supabase"],
+    image: { src: "/work/ai-cto.webp", alt: "The AI CTO landing page: Your AI writes the code. Now it has a CTO.", width: 1600, height: 732 },
+    host: "ai-cto-tan.vercel.app",
+  },
+];
+
+/* ── Agent workflows, drawn as an n8n-style canvas ─────────────────────────── */
+
+export type NodeKind = "trigger" | "agent" | "model" | "memory" | "tool" | "guard" | "human" | "output";
+
+export interface FlowNode {
+  id: string;
+  label: string;
+  /** The node type, as n8n would show it under the name. */
+  type: string;
+  kind: NodeKind;
+  /** Canvas position, in a 1180 × 460 coordinate space. */
+  x: number;
+  y: number;
+  /** What the node outputs when the run reaches it. */
+  output: string;
+}
+
+export interface Workflow {
+  slug: string;
+  name: string;
+  project: string;
+  description: string;
+  nodes: FlowNode[];
+  /** [from, to]. Edges into a model or memory node are drawn as AI sub-connections. */
+  edges: [string, string][];
+  /** Node ids in execution order. */
+  run: string[];
+}
+
+export const workflows: Workflow[] = [
+  {
+    slug: "nexus-ai",
+    name: "Ask Nexus",
+    project: "Nexus",
+    description: "A staff question becomes guarded SQL over live data, or a RAG answer from documents, or both.",
+    nodes: [
+      { id: "chat", label: "Chat message", type: "Trigger", kind: "trigger", x: 20, y: 170, output: "1 question" },
+      { id: "router", label: "Intent router", type: "AI Agent", kind: "agent", x: 240, y: 170, output: "intent: metrics" },
+      { id: "flash", label: "Gemini Flash", type: "Chat model", kind: "model", x: 200, y: 350, output: "" },
+      { id: "memory", label: "pgvector", type: "Memory", kind: "memory", x: 330, y: 350, output: "" },
+      { id: "sql", label: "Text-to-SQL", type: "Tool", kind: "tool", x: 480, y: 60, output: "1 query" },
+      { id: "rag", label: "RAG search", type: "Tool", kind: "tool", x: 480, y: 290, output: "4 chunks" },
+      { id: "guard", label: "SQL guard", type: "Static check + repair", kind: "guard", x: 680, y: 60, output: "safe ✓" },
+      { id: "db", label: "Postgres", type: "Read-only role", kind: "tool", x: 880, y: 60, output: "38 rows" },
+      { id: "answer", label: "Answer", type: "SSE stream", kind: "output", x: 1080, y: 175, output: "streamed" },
+    ],
+    edges: [["chat", "router"], ["router", "flash"], ["router", "memory"], ["router", "sql"], ["router", "rag"], ["sql", "guard"], ["guard", "db"], ["db", "answer"], ["rag", "answer"]],
+    run: ["chat", "router", "sql", "rag", "guard", "db", "answer"],
   },
   {
-    slug: "founder-fusion",
-    name: "Founder Fusion & MSL Portal",
-    summary: "Co-founder matching, plus booking for founders and track heads.",
-    detail:
-      "Two of Mesa Startup Lab's own products on GCP, used day to day by the incubator's founders and mentors.",
-    outcome: { value: "2", label: "incubator products in daily use" },
-    specs: ["Co-founder matching", "Founder + track-head booking", "~25 FastAPI modules: scores, mentor slots, grants", "Sole author"],
-    stack: ["Next.js", "Node.js", "GCP"],
-    pipeline: ["Founder profiles", "Matching", "Booking", "Notifications"],
-    href: "https://msl-portal.mesaschool.co.in",
+    slug: "influencer",
+    name: "Creator discovery",
+    project: "Influencer Intelligence",
+    description: "Cheap models cast the net; a person approves; the frontier model scores only what's left.",
+    nodes: [
+      { id: "brief", label: "Campaign brief", type: "Webhook", kind: "trigger", x: 20, y: 170, output: "1 brief" },
+      { id: "discover", label: "Discovery", type: "Serper + Apify", kind: "tool", x: 230, y: 170, output: "1,240 creators" },
+      { id: "filter", label: "Fit filter", type: "AI Agent", kind: "agent", x: 440, y: 170, output: "212 kept" },
+      { id: "flash", label: "Gemini Flash", type: "Chat model", kind: "model", x: 440, y: 350, output: "" },
+      { id: "intent", label: "Intent scoring", type: "pgvector", kind: "tool", x: 650, y: 60, output: "~9% to LLM" },
+      { id: "approve", label: "Brand approval", type: "Wait for human", kind: "human", x: 650, y: 280, output: "approved" },
+      { id: "score", label: "Deep scoring", type: "AI Agent", kind: "agent", x: 860, y: 170, output: "40 scored" },
+      { id: "gpt", label: "GPT", type: "Chat model", kind: "model", x: 860, y: 350, output: "" },
+      { id: "shortlist", label: "Shortlist", type: "Output", kind: "output", x: 1040, y: 170, output: "top 15" },
+    ],
+    edges: [["brief", "discover"], ["discover", "filter"], ["filter", "flash"], ["filter", "intent"], ["filter", "approve"], ["intent", "score"], ["approve", "score"], ["score", "gpt"], ["score", "shortlist"]],
+    run: ["brief", "discover", "filter", "intent", "approve", "score", "shortlist"],
+  },
+  {
+    slug: "compass",
+    name: "Idea validation",
+    project: "Founder's Compass",
+    description: "Flash extracts and searches, Pro mentors, and each of 8 stages feeds the score.",
+    nodes: [
+      { id: "idea", label: "Idea submitted", type: "Form trigger", kind: "trigger", x: 20, y: 170, output: "1 idea" },
+      { id: "extract", label: "Extract + plan", type: "Gemini Flash", kind: "model", x: 230, y: 170, output: "6 queries" },
+      { id: "search", label: "Search grounding", type: "Google Search", kind: "tool", x: 440, y: 60, output: "18 sources" },
+      { id: "recall", label: "Founder memory", type: "Qdrant", kind: "memory", x: 440, y: 280, output: "3 notes" },
+      { id: "mentor", label: "Stage mentor", type: "AI Agent · Gemini Pro", kind: "agent", x: 660, y: 170, output: "8 / 8 stages" },
+      { id: "score", label: "Scorer", type: "Structured output", kind: "guard", x: 870, y: 170, output: "72 / 100" },
+      { id: "plan", label: "Sprint plan", type: "Launch Pad agents", kind: "output", x: 1040, y: 170, output: "7-day plan" },
+    ],
+    edges: [["idea", "extract"], ["extract", "search"], ["extract", "recall"], ["search", "mentor"], ["recall", "mentor"], ["mentor", "score"], ["score", "plan"]],
+    run: ["idea", "extract", "search", "recall", "mentor", "score", "plan"],
   },
 ];
 
@@ -175,7 +244,7 @@ export const experience: Role[] = [
     place: "Bengaluru",
     points: [
       "Founding engineer for the incubator's startups across ed-tech, ad-tech and women-only ride-hailing.",
-      "Built Mesa LMS, Nexus AI, Founder's Compass, Influencer Intelligence and The AI CTO.",
+      "Built Nexus (Mesa's LMS and its AI agent), Founder's Compass, Influencer Intelligence and The AI CTO.",
       "Set Mesa's engineering standard: typed SQL with Kysely, Zod-validated APIs with OpenAPI docs, rotating-JWT auth, Vitest, GCP.",
       "Control AI and vendor spend with model tiering and approval gates.",
     ],
@@ -243,7 +312,7 @@ export const engineeringConfig: [key: string, value: string][] = [
 export const skills: { group: string; items: string[] }[] = [
   {
     group: "Agentic AI",
-    items: ["LangChain", "Multi-agent orchestration", "Text-to-SQL", "RAG", "Qdrant", "pgvector", "Gemini (Vertex AI)", "Azure OpenAI"],
+    items: ["LangChain", "LangGraph", "Multi-agent orchestration", "Text-to-SQL", "RAG", "Qdrant", "pgvector", "Gemini (Vertex AI)", "Azure OpenAI"],
   },
   {
     group: "Backend & data",
@@ -259,41 +328,21 @@ export const skills: { group: string; items: string[] }[] = [
   },
 ];
 
-/** Engineering throughput, verified from the GitHub API (Oct 2026). */
-export const gitStats: { value: string; label: string }[] = [
-  { value: "2,130", label: "commits across Mesa's org" },
-  { value: "39 / 52", label: "Mesa repos I've shipped to" },
-  { value: "13", label: "Mesa products live" },
-  { value: "6,018", label: "commits on GitHub, all time" },
-];
-
-export interface Deployment {
-  name: string;
-  host: string;
-  what: string;
-}
-
-/** Live products from the Mesa org that I built or led. All public URLs. */
-export const deployments: Deployment[] = [
-  { name: "mesa-lms", host: "students.mesaschool.co.in", what: "LMS for 5 roles, with Nexus AI" },
-  { name: "careers-crm", host: "careers-crm.mesaschool.co.in", what: "Placements and programme ops" },
-  { name: "msl-portal", host: "msl-portal.mesaschool.co.in", what: "Founders OS for the incubator" },
-  { name: "founders-compass", host: "compass-msl.mesaschool.co.in", what: "AI idea validation" },
-  { name: "influencer-intel", host: "influencer.mesaschool.co.in", what: "Creator discovery for D2C brands" },
-  { name: "horizon", host: "horizon.mesaschool.co.in", what: "AI verdicts on MBA case answers" },
-  { name: "msl-nxt", host: "msl-nxt.mesaschool.co.in", what: "Demo Day investor room" },
-  { name: "ideabaaz", host: "ideabaaz.mesaschool.co.in", what: "Startup festival platform" },
-  { name: "msl-startups", host: "msl.mesaschool.co.in", what: "Portfolio of MSL startups" },
-  { name: "ai-cto", host: "ai-cto-tan.vercel.app", what: "Build kit for non-technical founders" },
+/** Suggested first questions in the chat widget. */
+export const chatStarters = [
+  "What did you build at Mesa?",
+  "How does Nexus AI keep text-to-SQL safe?",
+  "Which stack would you pick for my MVP?",
+  "Are you open to new projects?",
 ];
 
 /** Section ids double as the trace-rail stages and command-palette targets. */
 export const sections = [
   { id: "top", label: "Input" },
   { id: "approach", label: "Approach" },
-  { id: "impact", label: "Impact" },
   { id: "work", label: "Work" },
-  { id: "live", label: "Live" },
+  { id: "workflows", label: "Workflows" },
+  { id: "impact", label: "Impact" },
   { id: "experience", label: "Experience" },
   { id: "stack", label: "Stack" },
   { id: "contact", label: "Contact" },

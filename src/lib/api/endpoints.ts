@@ -5,4 +5,5 @@
 export const ENDPOINTS = {
   health: "/api/health",
   contact: "/api/contact",
+  chat: "/api/chat",
 } as const;
