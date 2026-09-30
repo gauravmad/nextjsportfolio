@@ -3,9 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { Heart, Mail } from "lucide-react";
+
+import { GithubIcon, LinkedinIcon } from "@/components/site/brand-icons";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { profile } from "@/content/portfolio";
 import { contactSchema, useSendContact, type ContactFormValues, type ContactInput } from "@/features/contact";
 import { isApiError, toErrorMessage } from "@/lib/api/http-error";
@@ -134,41 +138,48 @@ export function Contact() {
           <h2 id="contact-title" className="type-display text-[clamp(3.75rem,11vw,10rem)]">
             Let&apos;s ship
             <br />
-            <span className="text-signal">yours.</span>
+            <span className="text-muted-foreground">yours.</span>
           </h2>
           <p className="mt-6 max-w-[44ch] text-lg leading-relaxed text-muted-foreground">
             Founders and teams: bring the idea, the spreadsheet you&apos;ve outgrown, or the AI feature that needs to work on real data. I&apos;ll tell you what&apos;s worth building first.
           </p>
-          <ul className="mt-8 space-y-2 font-mono text-sm">
-            <li>
-              <a href={`mailto:${profile.email}`} className="text-foreground underline decoration-rule underline-offset-4 hover:decoration-signal">
-                {profile.email}
-              </a>
-            </li>
-            <li>
-              <a href={profile.links.linkedin} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
-                linkedin.com/in/gauravdev04
-              </a>
-            </li>
-            <li>
-              <a href={profile.links.github} target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground">
-                github.com/gauravmad
-              </a>
-            </li>
+          <ul className="mt-8 flex gap-3" aria-label="Elsewhere">
+            {[
+              { href: `mailto:${profile.email}`, label: `Email ${profile.email}`, icon: <Mail className="size-5" /> },
+              { href: profile.links.linkedin, label: "LinkedIn", icon: <LinkedinIcon className="size-5" /> },
+              { href: profile.links.github, label: "GitHub", icon: <GithubIcon className="size-5" /> },
+            ].map((link) => (
+              <li key={link.label}>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <a
+                        href={link.href}
+                        target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+                        rel="noreferrer"
+                        aria-label={link.label}
+                        className="grid size-12 place-items-center rounded-xl border border-rule text-muted-foreground transition-colors hover:border-foreground/40 hover:text-foreground"
+                      />
+                    }
+                  >
+                    {link.icon}
+                  </TooltipTrigger>
+                  <TooltipContent>{link.label}</TooltipContent>
+                </Tooltip>
+              </li>
+            ))}
           </ul>
         </div>
         <ContactForm />
       </div>
 
-      <footer className="mt-28 flex flex-col gap-3 border-t border-rule pt-6 font-mono text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+      <footer className="mt-28 flex flex-col gap-3 border-t border-rule pt-6 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <p>
-          <span className="text-signal">git commit</span> -m &quot;thanks for scrolling&quot;
+          Designed & built with <Heart aria-label="love" className="inline size-3.5 fill-signal text-signal" /> by{" "}
+          <span className="text-foreground">{profile.name}</span>
         </p>
-        <p>
-          Next.js 16, React Three Fiber, GSAP and anime.js.{" "}
-          <a href="https://github.com/gauravmad/nextjsportfolio" target="_blank" rel="noreferrer" className="underline decoration-rule underline-offset-4 hover:text-foreground">
-            View source
-          </a>
+        <p className="font-mono text-xs">
+          <span className="text-signal">git commit</span> -m &quot;thanks for scrolling&quot;
         </p>
       </footer>
     </section>
