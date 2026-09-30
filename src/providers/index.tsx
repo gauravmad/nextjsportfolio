@@ -23,7 +23,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      {/* Dark by design: the site is the terminal from the GitHub profile. */}
+      <ThemeProvider attribute="class" forcedTheme="dark" disableTransitionOnChange>
         <Toaster>
           <TooltipProvider>{children}</TooltipProvider>
         </Toaster>
